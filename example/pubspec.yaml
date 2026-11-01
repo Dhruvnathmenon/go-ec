@@ -1,0 +1,18 @@
+name: goec_intro_example
+description: Runs the Go EC intro on its own.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  goec_intro:
+    path: ../
+
+flutter:
+  uses-material-design: false
+  assets:
+    - assets/maps_placeholder.png   # still of the current maps page, stands in for the real first screen

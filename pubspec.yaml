@@ -1,0 +1,16 @@
+name: goec_intro
+description: Go EC app launch intro. The logo is drawn from geometry, no image assets.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

@@ -1,0 +1,56 @@
+# Builds the demo on every push to main:
+# - web version to GitHub Pages (gh-pages branch)
+# - Android APK attached to the "demo" release
+name: Demo builds
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: demo
+  cancel-in-progress: true
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.9
+      - run: flutter test
+      - run: flutter build web --release --base-href /go-ec/
+        working-directory: example
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: example/build/web
+
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.9
+      - run: flutter build apk --release
+        working-directory: example
+      - run: cp example/build/app/outputs/flutter-apk/app-release.apk go-ec-intro.apk
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: demo
+          name: Demo app
+          body: Go EC intro demo for Android. Download go-ec-intro.apk on the phone and open it.
+          files: go-ec-intro.apk
+          make_latest: true
